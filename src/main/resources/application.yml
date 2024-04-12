@@ -3,8 +3,7 @@ spring:
     job:
       names: ${job.name:NONE}
     jdbc:
-      initialize-schema: never
-      table-prefix: BATCH_META .BATCH_
+      initialize-schema: always
   datasource:
     url: jdbc:postgresql://localhost:5432/batch_test
     username: jaehyuklee
@@ -12,3 +11,6 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        default_schema: spring_batch
