@@ -3,9 +3,12 @@ spring:
     job:
       names: ${job.name:NONE}
     jdbc:
-      initialize-schema: ALWAYS
+      initialize-schema: never
+      table-prefix: BATCH_META .BATCH_
   datasource:
     url: jdbc:postgresql://localhost:5432/batch_test
     username: jaehyuklee
     password:
     driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
