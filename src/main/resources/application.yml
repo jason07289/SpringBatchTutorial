@@ -1,0 +1,11 @@
+spring:
+  batch:
+    job:
+      names: ${job.name:NONE}
+    jdbc:
+      initialize-schema: ALWAYS
+  datasource:
+    url: jdbc:postgresql://localhost:5432/batch_test
+    username: jaehyuklee
+    password:
+    driver-class-name: org.postgresql.Driver
