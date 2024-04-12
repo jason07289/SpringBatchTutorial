@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job;
+package study.batch.springbatchtutorial.job.validatedparam.joblistener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -12,44 +12,46 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import study.batch.springbatchtutorial.job.validatedparam.joblistener.listener.JobLoggerListener;
 
 /**
  * desc: 기본
- * program args: --spring.batch.job.names=helloWorldJob
+ * program args: --spring.batch.job.names=jobListenerJob
  */
 @Configuration
 @RequiredArgsConstructor
-public class HelloWorldJobConfig {
+public class JobListenerJobConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
 
     private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job hellowWorldJob() {
-        return jobBuilderFactory.get("helloWorldJob")
+    public Job jobListenerJob() {
+        return jobBuilderFactory.get("jobListenerJob")
                 .incrementer(new RunIdIncrementer())
-                .start(helloWorldStep())
+                .listener(new JobLoggerListener())
+                .start(jobListenerStep())
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step helloWorldStep(){
-        return stepBuilderFactory.get("helloWorldStep")
-                .tasklet(helloWorldTasklet())
+    public Step jobListenerStep(){
+        return stepBuilderFactory.get("jobListenerStep")
+                .tasklet(jobListenerTasklet())
                 .build();
     }
 
     @StepScope
     @Bean
-    public Tasklet helloWorldTasklet() {
+    public Tasklet jobListenerTasklet() {
         return (stepContribution, chunkContext) -> {
             System.out.println("==========================");
-            System.out.println("hello world spring batch");
+            System.out.println("jobListener");
             System.out.println("==========================");
-
             return RepeatStatus.FINISHED;
+//            throw new RuntimeException("job is failed");
         };
     }
 }
