@@ -1,33 +1,23 @@
-package study.batch.springbatchtutorial.job.dbdataread;
+package study.batch.springbatchtutorial.job.dbdata.step.reader;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
-import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
+import org.springframework.stereotype.Component;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
-public class JpaCommonConfig {
+public class JpaOrdersReaderStep {
     private final OrdersRepository ordersRepository;
     public static final int PAGE_SIZE = 5;
-
-
-    @StepScope
-    @Bean
-    public ItemProcessor<Orders, Accounts> jpaOrdersProcessor(){
-        //읽어온 Orders를 Accounts로 매핑
-        return Accounts::create;
-    }
 
     @StepScope
     @Bean

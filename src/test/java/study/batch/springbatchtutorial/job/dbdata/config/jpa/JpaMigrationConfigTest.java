@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.dbdataread.jpawriter;
+package study.batch.springbatchtutorial.job.dbdata.config.jpa;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +16,6 @@ import study.batch.springbatchtutorial.SpringBatchTestConfig;
 import study.batch.springbatchtutorial.core.domain.accounts.AccountsRepository;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
-import study.batch.springbatchtutorial.job.dbdataread.jpawriter.JpaMigrationConfig;
 
 import java.util.ArrayList;
 import java.util.Date;

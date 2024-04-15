@@ -18,7 +18,10 @@ public class MigrationProcess {
     @Enumerated(EnumType.STRING)
     private MigrationStatus status;
 
+    private String jobId;
+
     private String errorLog;
+
 
     @Getter
     @AllArgsConstructor

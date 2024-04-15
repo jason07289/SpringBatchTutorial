@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.dbdataread.jpawriter;
+package study.batch.springbatchtutorial.job.dbdata.config.jpa;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -11,20 +11,13 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Sort;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 import study.batch.springbatchtutorial.core.domain.accounts.AccountsRepository;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
-import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * desc: 주문 테이블 -> 정산 테이블 데이터 이관

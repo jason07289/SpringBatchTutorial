@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.dbdataread.querywriter;
+package study.batch.springbatchtutorial.job.dbdata.config.query;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
