@@ -25,8 +25,8 @@ public class HelloWorldJobConfig {
 
     private final StepBuilderFactory stepBuilderFactory;
 
-    @Bean
-    public Job hellowWorldJob() {
+    @Bean(name = "helloWorldJob")
+    public Job helloWorldJob() {
         return jobBuilderFactory.get("helloWorldJob")
                 .incrementer(new RunIdIncrementer())
                 .start(helloWorldStep())
