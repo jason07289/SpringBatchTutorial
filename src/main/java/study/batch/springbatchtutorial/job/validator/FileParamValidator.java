@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.validatedparam.validator;
+package study.batch.springbatchtutorial.job.validator;
 
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;

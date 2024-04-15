@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.validatedparam.joblistener.listener;
+package study.batch.springbatchtutorial.job.joblistener.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;

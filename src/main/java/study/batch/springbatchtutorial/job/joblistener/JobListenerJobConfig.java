@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.validatedparam.joblistener;
+package study.batch.springbatchtutorial.job.joblistener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -12,7 +12,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import study.batch.springbatchtutorial.job.validatedparam.joblistener.listener.JobLoggerListener;
+import study.batch.springbatchtutorial.job.joblistener.listener.JobLoggerListener;
 
 /**
  * desc: 기본

@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.validatedparam.dbdataread;
+package study.batch.springbatchtutorial.job.dbdataread;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -70,10 +70,7 @@ public class TrMigrationConfig {
 //    @StepScope
 //    @Bean
 //    public ItemWriter<Accounts> trAccountsNativeQueryWriter(){
-//        return new RepositoryItemWriterBuilder<Accounts>()
-//                .repository(accountsRepository)
-//                .methodName("save")
-//                .build();
+//        return
 //    }
 
 
