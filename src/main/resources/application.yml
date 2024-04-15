@@ -14,3 +14,5 @@ spring:
     properties:
       hibernate:
         default_schema: spring_batch
+    hibernate:
+      ddl-auto: update
