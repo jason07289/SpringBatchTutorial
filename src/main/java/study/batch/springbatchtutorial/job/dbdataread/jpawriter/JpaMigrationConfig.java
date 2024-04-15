@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job.dbdataread;
+package study.batch.springbatchtutorial.job.dbdataread.jpawriter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -28,36 +28,36 @@ import java.util.Collections;
 
 /**
  * desc: 주문 테이블 -> 정산 테이블 데이터 이관
- * program args: --spring.batch.job.names=trMigrationJob
+ * program args: --spring.batch.job.names=jpaMigrationJob
  */
 @Configuration
 @RequiredArgsConstructor
-public class TrMigrationConfig {
-    private final OrdersRepository ordersRepository;
+public class JpaMigrationConfig {
     private final AccountsRepository accountsRepository;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
+    public static final int CHUNK_SIZE = 5;
     @Bean
-    public Job trMigrationJob(Step trMigrationStep) {
-        return jobBuilderFactory.get("trMigrationJob")
+    public Job jpaMigrationJob(Step jpaMigrationStep) {
+        return jobBuilderFactory.get("jpaMigrationJob")
                 .incrementer(new RunIdIncrementer())
-                .start(trMigrationStep)
+                .start(jpaMigrationStep)
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step trMigrationStep(ItemReader trOrdersReader, ItemProcessor trOrdersProcessor, ItemWriter trAccountsWriter) {
-        return stepBuilderFactory.get("trMigrationStep")
+    public Step jpaMigrationStep(ItemReader jpaOrdersReader, ItemProcessor jpaOrdersProcessor, ItemWriter jpaAccountsWriter) {
+        return stepBuilderFactory.get("jpaMigrationStep")
                 //<I: input, O:output> input으로 읽어와서 output으로 job내에서 사용된다.
-                .<Orders, Accounts>chunk(5)
-                .reader(trOrdersReader)
+                .<Orders, Accounts>chunk(CHUNK_SIZE)
+                .reader(jpaOrdersReader)
 //                .writer(items -> {
 //                    items.forEach(System.out::println);
 //                })
-                .processor(trOrdersProcessor)
-                .writer(trAccountsWriter)
+                .processor(jpaOrdersProcessor)
+                .writer(jpaAccountsWriter)
                 .build();
     }
 
@@ -80,7 +80,7 @@ public class TrMigrationConfig {
      */
     @StepScope
     @Bean
-    public RepositoryItemWriter<Accounts> trAccountsRepositoryWriter(){
+    public RepositoryItemWriter<Accounts> jpaAccountsRepositoryWriter(){
         return new RepositoryItemWriterBuilder<Accounts>()
                 .repository(accountsRepository)
                 //메소드 명 string으로 접근하기에 안좋아 보임.
@@ -95,28 +95,7 @@ public class TrMigrationConfig {
      */
     @StepScope
     @Bean
-    public ItemWriter<Accounts> trAccountsWriter(){
+    public ItemWriter<Accounts> jpaAccountsWriter(){
         return items -> accountsRepository.saveAll(items);
-    }
-
-    @StepScope
-    @Bean
-    public ItemProcessor<Orders, Accounts> trOrdersProcessor(){
-        //읽어온 Orders를 Accounts로 매핑
-        return Accounts::create;
-    }
-
-    @StepScope
-    @Bean
-    public RepositoryItemReader<Orders> trOrdersReader() {
-        return new RepositoryItemReaderBuilder<Orders>()
-                .name("trOrdersReader")
-                .repository(ordersRepository)
-                .methodName("findAll")
-                .pageSize(5)
-                .arguments(Arrays.asList())
-                .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-                .build();
-
     }
 }

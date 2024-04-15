@@ -2,6 +2,7 @@ package study.batch.springbatchtutorial.core.domain.accounts;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Entity
 @ToString
 @NoArgsConstructor
+@Setter
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

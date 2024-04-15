@@ -1,6 +1,5 @@
-package study.batch.springbatchtutorial.job.dbdataread;
+package study.batch.springbatchtutorial.job.dbdataread.jpawriter;
 
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,17 +16,17 @@ import study.batch.springbatchtutorial.SpringBatchTestConfig;
 import study.batch.springbatchtutorial.core.domain.accounts.AccountsRepository;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
+import study.batch.springbatchtutorial.job.dbdataread.jpawriter.JpaMigrationConfig;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBatchTest
-@SpringBootTest(classes = {SpringBatchTestConfig.class, TrMigrationConfig.class})
-class TrMigrationConfigTest {
+@SpringBootTest(classes = {SpringBatchTestConfig.class, JpaMigrationConfig.class})
+class JpaMigrationConfigTest {
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
