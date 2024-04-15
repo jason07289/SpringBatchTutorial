@@ -19,6 +19,7 @@ import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
 import study.batch.springbatchtutorial.job.migration.config.JpaMigrationConfig;
 import study.batch.springbatchtutorial.job.migration.step.processor.JpaOrdersProcessorStep;
 import study.batch.springbatchtutorial.job.migration.step.reader.JpaOrdersReaderStep;
+import study.batch.springbatchtutorial.job.migration.step.writer.JpaAccountsWriterStep;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,7 @@ import java.util.List;
         JpaMigrationConfig.class,
         JpaOrdersProcessorStep.class,
         JpaOrdersReaderStep.class,
+        JpaAccountsWriterStep.class
 })
 class JpaMigrationConfigTest {
     @Autowired

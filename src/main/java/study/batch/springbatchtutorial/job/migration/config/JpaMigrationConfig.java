@@ -26,7 +26,6 @@ import study.batch.springbatchtutorial.core.domain.orders.Orders;
 @Configuration
 @RequiredArgsConstructor
 public class JpaMigrationConfig {
-    private final AccountsRepository accountsRepository;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
 
@@ -54,41 +53,4 @@ public class JpaMigrationConfig {
                 .build();
     }
 
-//    /**
-//     * 실제 데이터 입력하는 부분
-//     * id 채번을 막기 위해 native 쿼리로 작성 필요.
-//     * @return
-//     */
-//    @StepScope
-//    @Bean
-//    public ItemWriter<Accounts> trAccountsNativeQueryWriter(){
-//        return
-//    }
-
-
-    /**
-     * 실제 데이터 입력하는 부분
-     * id autoIncrement 문제 고민좀 해봐야함.
-     * @return
-     */
-    @StepScope
-    @Bean
-    public RepositoryItemWriter<Accounts> jpaAccountsRepositoryWriter(){
-        return new RepositoryItemWriterBuilder<Accounts>()
-                .repository(accountsRepository)
-                //메소드 명 string으로 접근하기에 안좋아 보임.
-                .methodName("save")
-                .build();
-    }
-
-    /**
-     * 실제 데이터 입력하는 부분
-     * id autoIncrement 문제 고민좀 해봐야함.
-     * @return
-     */
-    @StepScope
-    @Bean
-    public ItemWriter<Accounts> jpaAccountsWriter(){
-        return items -> accountsRepository.saveAll(items);
-    }
 }
