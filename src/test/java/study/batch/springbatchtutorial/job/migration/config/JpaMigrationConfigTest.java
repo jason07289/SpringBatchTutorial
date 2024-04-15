@@ -16,8 +16,7 @@ import study.batch.springbatchtutorial.SpringBatchTestConfig;
 import study.batch.springbatchtutorial.core.domain.accounts.AccountsRepository;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
-import study.batch.springbatchtutorial.job.migration.config.JpaMigrationConfig;
-import study.batch.springbatchtutorial.job.migration.step.processor.JpaOrdersProcessorStep;
+import study.batch.springbatchtutorial.job.migration.step.processor.OrdersProcessorStep;
 import study.batch.springbatchtutorial.job.migration.step.reader.JpaOrdersReaderStep;
 import study.batch.springbatchtutorial.job.migration.step.writer.JpaAccountsWriterStep;
 
@@ -31,7 +30,7 @@ import java.util.List;
 @SpringBootTest(classes = {
         SpringBatchTestConfig.class,
         JpaMigrationConfig.class,
-        JpaOrdersProcessorStep.class,
+        OrdersProcessorStep.class,
         JpaOrdersReaderStep.class,
         JpaAccountsWriterStep.class
 })

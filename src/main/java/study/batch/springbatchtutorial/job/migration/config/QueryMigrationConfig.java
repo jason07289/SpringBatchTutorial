@@ -6,19 +6,15 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
-
-import javax.sql.DataSource;
+import study.batch.springbatchtutorial.job.migration.listener.AccountsWriterChunkListener;
 
 
 /**
@@ -30,7 +26,7 @@ import javax.sql.DataSource;
 public class QueryMigrationConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    public static final int CHUNK_SIZE = 5;
+    public static final int CHUNK_SIZE = 1;
 
     @Bean
     public Job queryMigrationJob(Step queryMigrationStep) {
@@ -43,12 +39,16 @@ public class QueryMigrationConfig {
 
     @JobScope
     @Bean
-    public Step queryMigrationStep(ItemReader jpaOrdersReader, ItemProcessor jpaOrdersProcessor, ItemWriter queryAccountsWriter) {
+    public Step queryMigrationStep(ItemReader jpaOrdersReader,
+                                   ItemProcessor jpaOrdersProcessor,
+                                   ItemWriter queryAccountsWriter,
+                                   AccountsWriterChunkListener chunkListener) {
         return stepBuilderFactory.get("queryMigrationStep")
                 .<Orders, Accounts>chunk(CHUNK_SIZE)
                 .reader(jpaOrdersReader)
                 .processor(jpaOrdersProcessor)
                 .writer(queryAccountsWriter)
+                .listener(chunkListener)
                 .build();
     }
 

@@ -23,7 +23,7 @@ public class QueryAccountsWriterStep {
      */
     @StepScope
     @Bean
-    public JdbcBatchItemWriter<Accounts> queryAccountsWriter(){
+    public JdbcBatchItemWriter<Accounts> queryAccountsWriter() throws RuntimeException{
         return new JdbcBatchItemWriterBuilder<Accounts>()
                 .dataSource(dataSource)
                 //postgresSQL의 경우 스키마 명시가 필요했음.

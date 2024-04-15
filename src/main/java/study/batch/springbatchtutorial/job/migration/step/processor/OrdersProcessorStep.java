@@ -9,7 +9,7 @@ import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
 @Component
 @RequiredArgsConstructor
-public class JpaOrdersProcessorStep {
+public class OrdersProcessorStep {
     @StepScope
     @Bean
     public ItemProcessor<Orders, Accounts> jpaOrdersProcessor(){

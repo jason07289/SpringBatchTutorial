@@ -26,7 +26,7 @@ public class JpaOrdersReaderStep {
                 .name("trOrdersReader")
                 .repository(ordersRepository)
                 .methodName("findAll")
-                .pageSize(PAGE_SIZE)
+//                .pageSize(PAGE_SIZE)
                 .arguments(Arrays.asList())
                 .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
                 .build();
