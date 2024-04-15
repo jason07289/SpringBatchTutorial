@@ -1,7 +1,6 @@
 package study.batch.springbatchtutorial.core.domain.orders;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +11,8 @@ import java.util.Date;
 @Getter
 @ToString
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

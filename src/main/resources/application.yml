@@ -1,4 +1,13 @@
+#default -> local
 spring:
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
   batch:
     job:
       names: ${job.name:NONE}
@@ -16,3 +25,11 @@ spring:
         default_schema: spring_batch
     hibernate:
       ddl-auto: update
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    database: h2
+

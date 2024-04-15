@@ -1,4 +1,4 @@
-package study.batch.springbatchtutorial.job;
+package study.batch.springbatchtutorial.job.helloworld;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
