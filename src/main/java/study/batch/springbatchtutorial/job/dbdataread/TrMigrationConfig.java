@@ -25,7 +25,6 @@ import study.batch.springbatchtutorial.core.domain.orders.OrdersRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * desc: 주문 테이블 -> 정산 테이블 데이터 이관
