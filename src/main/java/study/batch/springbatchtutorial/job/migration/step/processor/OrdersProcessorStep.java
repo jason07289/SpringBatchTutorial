@@ -2,6 +2,7 @@ package study.batch.springbatchtutorial.job.migration.step.processor;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

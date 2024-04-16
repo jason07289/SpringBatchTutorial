@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 import study.batch.springbatchtutorial.core.domain.orders.Orders;
-import study.batch.springbatchtutorial.job.migration.listener.AccountsWriterChunkListener;
+import study.batch.springbatchtutorial.job.migration.listener.AccountsWriterListener;
+import study.batch.springbatchtutorial.job.migration.listener.MigrationChunkListener;
 
 
 /**
@@ -26,7 +27,7 @@ import study.batch.springbatchtutorial.job.migration.listener.AccountsWriterChun
 public class QueryMigrationConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    public static final int CHUNK_SIZE = 1;
+    public static final int CHUNK_SIZE = 10;
 
     @Bean
     public Job queryMigrationJob(Step queryMigrationStep) {
@@ -42,12 +43,15 @@ public class QueryMigrationConfig {
     public Step queryMigrationStep(ItemReader jpaOrdersReader,
                                    ItemProcessor jpaOrdersProcessor,
                                    ItemWriter queryAccountsWriter,
-                                   AccountsWriterChunkListener chunkListener) {
+                                   MigrationChunkListener chunkListener,
+                                   AccountsWriterListener writerListener
+                                   ) {
         return stepBuilderFactory.get("queryMigrationStep")
                 .<Orders, Accounts>chunk(CHUNK_SIZE)
                 .reader(jpaOrdersReader)
                 .processor(jpaOrdersProcessor)
                 .writer(queryAccountsWriter)
+                .listener(writerListener)
                 .listener(chunkListener)
                 .build();
     }

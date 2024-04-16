@@ -3,11 +3,11 @@ package study.batch.springbatchtutorial.core.domain.process;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @ToString
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MigrationProcess {
     @Id
@@ -18,15 +18,42 @@ public class MigrationProcess {
     @Enumerated(EnumType.STRING)
     private MigrationStatus status;
 
-    private String jobId;
+    private Long resourceId;
 
     private String errorLog;
+
+    private Date txStartTime;
+
+    private Date txEndTime;
+
+    private String jobId;
 
 
     @Getter
     @AllArgsConstructor
-    public enum MigrationStatus {
+    private enum MigrationStatus {
         SUCCESS,
-        FAIL
+        FAIL,
+        CREATED,
     }
+
+    public static MigrationProcess create(Long resourceId){
+        MigrationProcess migrationProcess = new MigrationProcess();
+        migrationProcess.status = MigrationStatus.CREATED;
+        migrationProcess.resourceId = resourceId;
+        migrationProcess.txStartTime = new Date();
+        return migrationProcess;
+    }
+
+    public void isFail(String errorLog) {
+        this.status = MigrationStatus.FAIL;
+        this.errorLog = errorLog;
+        this.txEndTime = new Date();
+    }
+
+    public void isSuccess() {
+        this.status = MigrationStatus.SUCCESS;
+        this.txEndTime = new Date();
+    }
+
 }
