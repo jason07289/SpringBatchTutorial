@@ -27,7 +27,8 @@ import study.batch.springbatchtutorial.job.migration.listener.MigrationChunkList
 public class QueryMigrationConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    public static final int CHUNK_SIZE = 10;
+    //Job parameter를 통해 동적으로 변경 할 수 있으면 좋다.
+    public static int CHUNK_SIZE = 100;
 
     @Bean
     public Job queryMigrationJob(Step queryMigrationStep) {

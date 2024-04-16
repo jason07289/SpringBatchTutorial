@@ -17,7 +17,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class JpaOrdersReaderStep {
     private final OrdersRepository ordersRepository;
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGE_SIZE = 100;
 
     @StepScope
     @Bean
