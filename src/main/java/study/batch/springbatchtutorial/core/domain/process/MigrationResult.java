@@ -27,6 +27,11 @@ public class MigrationResult {
 
     private Date txEndTime;
 
+    public void resetTxTime() {
+        this.txStartTime = new Date();
+        this.txEndTime = null;
+    }
+
 
     @Getter
     @AllArgsConstructor
@@ -40,7 +45,6 @@ public class MigrationResult {
         MigrationResult migrationResult = new MigrationResult();
         migrationResult.status = MigrationStatus.CREATED;
         migrationResult.resourceId = resourceId;
-        migrationResult.txStartTime = new Date();
         return migrationResult;
     }
 

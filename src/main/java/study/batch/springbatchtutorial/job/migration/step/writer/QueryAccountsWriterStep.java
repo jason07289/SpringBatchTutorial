@@ -4,17 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 
 import javax.sql.DataSource;
-@RequiredArgsConstructor
 @Component
 public class QueryAccountsWriterStep {
-    private final DataSource dataSource; // DataSource DI
+
+    private final DataSource subDataSource; // DataSource DI
     public static final String SCHEMA_NAME = "spring_batch";
+
+    public QueryAccountsWriterStep(@Qualifier("externalDataSource") DataSource subDataSource) {
+        this.subDataSource = subDataSource;
+    }
 
     /**
      * 실제 데이터 insert
@@ -25,7 +30,7 @@ public class QueryAccountsWriterStep {
     @Bean
     public JdbcBatchItemWriter<Accounts> queryAccountsWriter() throws RuntimeException{
         return new JdbcBatchItemWriterBuilder<Accounts>()
-                .dataSource(dataSource)
+                .dataSource(subDataSource)
                 //postgresSQL의 경우 스키마 명시가 필요했음.
                 //accounts에는 column_name values는 java의 fieldName
                 .sql("insert into " + SCHEMA_NAME +

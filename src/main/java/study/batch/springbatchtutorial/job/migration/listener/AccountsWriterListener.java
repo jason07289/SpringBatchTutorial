@@ -24,6 +24,7 @@ public class AccountsWriterListener implements ItemWriteListener<Accounts> {
         accountsList.forEach(accounts -> {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
                     .orElse(MigrationResult.create(accounts.getId()));
+            migrationResult.resetTxTime();
             repository.save(migrationResult);
         });
     }
@@ -43,9 +44,6 @@ public class AccountsWriterListener implements ItemWriteListener<Accounts> {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onWriteError(Exception exception, List<? extends Accounts> accountsList) {
-        String em = exception.getMessage();
-
-
         accountsList.forEach(accounts -> {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
                     .orElseThrow(NoSuchElementException::new);

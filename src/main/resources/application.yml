@@ -15,10 +15,17 @@ spring:
     jdbc:
       initialize-schema: always
   datasource:
-    url: jdbc:postgresql://localhost:5432/batch_test
-    username: jaehyuklee
-    password:
-    driver-class-name: org.postgresql.Driver
+    hikari:
+      main-datasource:
+        jdbc-url: jdbc:postgresql://localhost:5432/batch_test
+        username: jaehyuklee
+        password:
+        driver-class-name: org.postgresql.Driver
+      external-datasource:
+        jdbc-url: jdbc:postgresql://localhost:5432/batch_test_external
+        username: jaehyuklee
+        password:
+        driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     properties:
