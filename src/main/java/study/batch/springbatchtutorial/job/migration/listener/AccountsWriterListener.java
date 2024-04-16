@@ -4,28 +4,53 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
-import study.batch.springbatchtutorial.core.domain.process.MigrationProcess;
-import study.batch.springbatchtutorial.core.domain.process.MigrationProcessRepository;
+import study.batch.springbatchtutorial.core.domain.process.MigrationResult;
+import study.batch.springbatchtutorial.core.domain.process.MigrationResultRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class AccountsWriterListener implements ItemWriteListener<Accounts> {
-    private final MigrationProcessRepository repository;
+    private final MigrationResultRepository repository;
     @Override
-    public void beforeWrite(List<? extends Accounts> list) {
-        list.forEach(item -> System.out.println("beforeWrite:  " + item.getOrderItem()));
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void beforeWrite(List<? extends Accounts> accountsList) {
+        accountsList.forEach(accounts -> {
+            MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
+                    .orElse(MigrationResult.create(accounts.getId()));
+            repository.save(migrationResult);
+        });
     }
 
     @Override
-    public void afterWrite(List<? extends Accounts> list) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void afterWrite(List<? extends Accounts> accountsList) {
+        accountsList.forEach(accounts -> {
+            MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
+                    .orElseThrow(NoSuchElementException::new);
+            migrationResult.isSuccess();
+            repository.save(migrationResult);
+        });
 
     }
 
     @Override
-    public void onWriteError(Exception e, List<? extends Accounts> list) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void onWriteError(Exception exception, List<? extends Accounts> accountsList) {
+        String em = exception.getMessage();
 
+
+        accountsList.forEach(accounts -> {
+            MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
+                    .orElseThrow(NoSuchElementException::new);
+            migrationResult.isFail(exception.getMessage());
+            repository.save(migrationResult);
+        });
     }
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 @ToString
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MigrationProcess {
+public class MigrationResult {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,13 +20,12 @@ public class MigrationProcess {
 
     private Long resourceId;
 
+    @Column(columnDefinition = "TEXT")
     private String errorLog;
 
     private Date txStartTime;
 
     private Date txEndTime;
-
-    private String jobId;
 
 
     @Getter
@@ -37,12 +36,12 @@ public class MigrationProcess {
         CREATED,
     }
 
-    public static MigrationProcess create(Long resourceId){
-        MigrationProcess migrationProcess = new MigrationProcess();
-        migrationProcess.status = MigrationStatus.CREATED;
-        migrationProcess.resourceId = resourceId;
-        migrationProcess.txStartTime = new Date();
-        return migrationProcess;
+    public static MigrationResult create(Long resourceId){
+        MigrationResult migrationResult = new MigrationResult();
+        migrationResult.status = MigrationStatus.CREATED;
+        migrationResult.resourceId = resourceId;
+        migrationResult.txStartTime = new Date();
+        return migrationResult;
     }
 
     public void isFail(String errorLog) {
