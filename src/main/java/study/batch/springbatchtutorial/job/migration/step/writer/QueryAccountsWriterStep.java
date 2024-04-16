@@ -1,5 +1,6 @@
 package study.batch.springbatchtutorial.job.migration.step.writer;
 
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -14,11 +15,11 @@ import javax.sql.DataSource;
 @Component
 public class QueryAccountsWriterStep {
 
-    private final DataSource subDataSource; // DataSource DI
+    private final DataSource externalDataSource; // DataSource DI
     public static final String SCHEMA_NAME = "spring_batch";
 
-    public QueryAccountsWriterStep(@Qualifier("externalDataSource") DataSource subDataSource) {
-        this.subDataSource = subDataSource;
+    public QueryAccountsWriterStep(@Qualifier("externalDataSource") DataSource externalDataSource) {
+        this.externalDataSource = externalDataSource;
     }
 
     /**
@@ -29,8 +30,12 @@ public class QueryAccountsWriterStep {
     @StepScope
     @Bean
     public JdbcBatchItemWriter<Accounts> queryAccountsWriter() throws RuntimeException{
+
+        HikariDataSource hikariDataSource = (HikariDataSource) externalDataSource;
+        hikariDataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/batch_test_external");
+
         return new JdbcBatchItemWriterBuilder<Accounts>()
-                .dataSource(subDataSource)
+                .dataSource(externalDataSource)
                 //postgresSQL의 경우 스키마 명시가 필요했음.
                 //accounts에는 column_name values는 java의 fieldName
                 .sql("insert into " + SCHEMA_NAME +
