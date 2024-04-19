@@ -25,10 +25,6 @@ spring:
         username: jaehyuklee
         password:
         driver-class-name: org.postgresql.Driver
-      target:
-        username: jaehyuklee
-        password:
-        driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     properties:
@@ -36,6 +32,15 @@ spring:
         default_schema: spring_batch
     hibernate:
       ddl-auto: update
+jae:
+  batch:
+    datasource:
+      targets: dev, qa, prod
+      urls: jdbc:postgresql://localhost:5432/batch_test_external, u2, u3
+      usernames: jaehyuklee, n2, n3
+      passwords:
+      driver-class-names: org.postgresql.Driver, org.postgresql.Driver, org.postgresql.Driver
+
 ---
 spring:
   config:

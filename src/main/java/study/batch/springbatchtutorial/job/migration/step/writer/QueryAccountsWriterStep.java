@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
+import study.batch.springbatchtutorial.db.DataSourceContextHolder;
 
 import javax.sql.DataSource;
 @Component
@@ -33,10 +34,9 @@ public class QueryAccountsWriterStep {
      */
     @StepScope
     @Bean
-    public JdbcBatchItemWriter<Accounts> queryAccountsWriter(@Value("#{jobParameters['external.jdbc.url']}") String jdbcUrl) throws RuntimeException{
-
-        HikariDataSource hikariDataSource = (HikariDataSource) externalDataSource;
-        hikariDataSource.setJdbcUrl(jdbcUrl);
+    public JdbcBatchItemWriter<Accounts> queryAccountsWriter(@Value("#{jobParameters['external.target']}") String target) throws RuntimeException{
+        //AbstractRoutingDataSource에서 datasource 선택
+        DataSourceContextHolder.setDataSourceKey(target);
 
         return new JdbcBatchItemWriterBuilder<Accounts>()
                 .dataSource(externalDataSource)
