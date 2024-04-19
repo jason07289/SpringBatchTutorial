@@ -22,13 +22,13 @@ public class DatabaseConfig {
      */
     @Primary
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.hikari.main-datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.main")
     public DataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
     @Bean(name = "externalDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.hikari.external-datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari.target")
     public DataSource externalDataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
 //        HikariDataSource hikariDataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();

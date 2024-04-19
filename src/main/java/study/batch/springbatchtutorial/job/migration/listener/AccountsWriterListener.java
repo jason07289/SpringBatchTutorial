@@ -19,36 +19,55 @@ import java.util.NoSuchElementException;
 public class AccountsWriterListener implements ItemWriteListener<Accounts> {
     private final MigrationResultRepository repository;
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void beforeWrite(List<? extends Accounts> accountsList) {
-        accountsList.forEach(accounts -> {
+        accountsList.forEach(this::acceptBeforeWrite);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void acceptBeforeWrite(Accounts accounts) {
+        try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
-                    .orElse(MigrationResult.create(accounts.getId()));
+                .orElse(MigrationResult.create(accounts.getId()));
             migrationResult.resetTxTime();
             repository.save(migrationResult);
-        });
+        } catch (Exception e) {
+            log.error("acceptBeforeWrite(Propagation.REQUIRES_NEW) exception catch: {} ", e.getMessage());
+        }
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void afterWrite(List<? extends Accounts> accountsList) {
-        accountsList.forEach(accounts -> {
+        accountsList.forEach(this::acceptAfterWrite);
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void acceptAfterWrite(Accounts accounts) {
+        try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
                     .orElseThrow(NoSuchElementException::new);
             migrationResult.isSuccess();
             repository.save(migrationResult);
-        });
-
+        } catch (Exception e) {
+            log.error("acceptAfterWrite(Propagation.REQUIRES_NEW) exception catch: {} ", e.getMessage());
+        }
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onWriteError(Exception exception, List<? extends Accounts> accountsList) {
         accountsList.forEach(accounts -> {
+            acceptOnWriteError(exception, accounts);
+        });
+    }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void acceptOnWriteError(Exception exception, Accounts accounts) {
+        try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
                     .orElseThrow(NoSuchElementException::new);
             migrationResult.isFail(exception.getMessage());
             repository.save(migrationResult);
-        });
+        } catch (Exception e) {
+            log.error("acceptOnWriteError(Propagation.REQUIRES_NEW) exception catch: {} ", e.getMessage());
+        }
     }
 }

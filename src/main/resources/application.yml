@@ -20,12 +20,12 @@ spring:
 #    password:
 #    driver-class-name: org.postgresql.Driver
     hikari:
-      main-datasource:
+      main:
         jdbc-url: jdbc:postgresql://localhost:5432/batch_test
         username: jaehyuklee
         password:
         driver-class-name: org.postgresql.Driver
-      external-datasource:
+      target:
         username: jaehyuklee
         password:
         driver-class-name: org.postgresql.Driver
