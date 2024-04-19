@@ -35,17 +35,7 @@ public class DataSourceConfig {
     @Bean(name = "dataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
-    }
-
-    @Getter
-    @Builder
-    private static class TargetDataSource {
-        private String url;
-        private String userName;
-        private String password;
-        private String driverClassName;
-
+        return DataSourceBuilder.create().build();
     }
     private DataSource createDataSource(String url, String userName, String password, String driverClassName) {
         HikariDataSource dataSource =
