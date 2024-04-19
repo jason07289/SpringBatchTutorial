@@ -28,7 +28,8 @@ public class QueryMigrationConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     //Job parameter를 통해 동적으로 변경 할 수 있으면 좋다.
-    public static int CHUNK_SIZE = 100;
+    public static int CHUNK_SIZE = 1;
+    public static int SKIP_LIMIT = 100;
 
     @Bean
     public Job queryMigrationJob(Step queryMigrationStep) {
@@ -52,6 +53,9 @@ public class QueryMigrationConfig {
                 .reader(jpaOrdersReader)
                 .processor(jpaOrdersProcessor)
                 .writer(queryAccountsWriter)
+                .faultTolerant()
+                .skipLimit(SKIP_LIMIT) // 최대 허용 스킵 횟수
+                .skip(Exception.class) // 스킵할 예외 유형
                 .listener(writerListener)
                 .listener(chunkListener)
                 .build();

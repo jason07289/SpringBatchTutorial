@@ -27,7 +27,8 @@ public class MigrationResult {
 
     private Date txEndTime;
 
-    public void resetTxTime() {
+    public void reset() {
+        this.status = MigrationStatus.CREATED;
         this.txStartTime = new Date();
         this.txEndTime = null;
     }

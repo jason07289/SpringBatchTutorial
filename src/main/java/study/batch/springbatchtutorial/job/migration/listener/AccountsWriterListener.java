@@ -19,16 +19,17 @@ import java.util.NoSuchElementException;
 public class AccountsWriterListener implements ItemWriteListener<Accounts> {
     private final MigrationResultRepository repository;
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void beforeWrite(List<? extends Accounts> accountsList) {
         accountsList.forEach(this::acceptBeforeWrite);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+
     public void acceptBeforeWrite(Accounts accounts) {
         try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
                 .orElse(MigrationResult.create(accounts.getId()));
-            migrationResult.resetTxTime();
+            migrationResult.reset();
             repository.save(migrationResult);
         } catch (Exception e) {
             log.error("acceptBeforeWrite(Propagation.REQUIRES_NEW) exception catch: {} ", e.getMessage());
@@ -36,12 +37,12 @@ public class AccountsWriterListener implements ItemWriteListener<Accounts> {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void afterWrite(List<? extends Accounts> accountsList) {
         accountsList.forEach(this::acceptAfterWrite);
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void acceptAfterWrite(Accounts accounts) {
         try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())
@@ -54,12 +55,12 @@ public class AccountsWriterListener implements ItemWriteListener<Accounts> {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onWriteError(Exception exception, List<? extends Accounts> accountsList) {
         accountsList.forEach(accounts -> {
             acceptOnWriteError(exception, accounts);
         });
     }
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void acceptOnWriteError(Exception exception, Accounts accounts) {
         try {
             MigrationResult migrationResult = repository.findByResourceId(accounts.getId())

@@ -33,7 +33,7 @@ public class DataSourceConfig {
      */
     @Primary
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.hikari.main")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
@@ -49,7 +49,7 @@ public class DataSourceConfig {
     }
     private DataSource createDataSource(String url, String userName, String password, String driverClassName) {
         HikariDataSource dataSource =
-                new com.zaxxer.hikari.HikariDataSource();
+                new HikariDataSource();
 
         dataSource.setJdbcUrl(url);
         dataSource.setUsername(userName);
