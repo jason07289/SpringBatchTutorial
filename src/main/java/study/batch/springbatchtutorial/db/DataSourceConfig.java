@@ -47,9 +47,9 @@ public class DataSourceConfig {
         dataSource.setDriverClassName(driverClassName);
         return dataSource;
     }
-    @Bean(name = "externalDataSource")
+    @Bean(name = "routingDataSource")
 //    @ConfigurationProperties(prefix = "spring.datasource.hikari.target")
-    public DataSource externalDataSource() {
+    public DataSource routingDataSource() {
         Map<Object, Object> targetDataSourceMap = new HashMap<>();
         String[] targets = dataSourceProperties.getTargets();
         String[] urls = dataSourceProperties.getUrls();

@@ -20,11 +20,11 @@ import javax.sql.DataSource;
 @Component
 public class QueryAccountsWriterStep {
 
-    private final DataSource externalDataSource; // DataSource DI
+    private final DataSource routingDataSource; // DataSource DI
     public static final String SCHEMA_NAME = "spring_batch";
 
-    public QueryAccountsWriterStep(@Qualifier("externalDataSource") DataSource externalDataSource) {
-        this.externalDataSource = externalDataSource;
+    public QueryAccountsWriterStep(@Qualifier("routingDataSource") DataSource externalDataSource) {
+        this.routingDataSource = externalDataSource;
     }
 
     /**
@@ -39,7 +39,7 @@ public class QueryAccountsWriterStep {
         DataSourceContextHolder.setDataSourceKey(target);
 
         return new JdbcBatchItemWriterBuilder<Accounts>()
-                .dataSource(externalDataSource)
+                .dataSource(routingDataSource)
                 //postgresSQL의 경우 스키마 명시가 필요했음.
                 //accounts에는 column_name values는 java의 fieldName
                 .sql("insert into " + SCHEMA_NAME +
