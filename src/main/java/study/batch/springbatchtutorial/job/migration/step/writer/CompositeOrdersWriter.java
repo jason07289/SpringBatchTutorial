@@ -16,10 +16,11 @@ import java.util.List;
 public class CompositeOrdersWriter {
     private final JdbcBatchItemWriter<Orders> deleteOrdersWriter;
     private final JdbcBatchItemWriter<Orders> insertOrdersWriter;
+    private final JdbcBatchItemWriter<Orders> deleteAccountsWriter;
     @StepScope
     @Bean
     public CompositeItemWriter<Orders> compositeOrdersItemWriter() {
-        List<ItemWriter<? super Orders>> itemWriters = Arrays.asList(deleteOrdersWriter, insertOrdersWriter);
+        List<ItemWriter<? super Orders>> itemWriters = Arrays.asList(deleteOrdersWriter, deleteAccountsWriter, insertOrdersWriter);
 
         CompositeItemWriter<Orders> compositeItemWriter = new CompositeItemWriter<>();
         compositeItemWriter.setDelegates(itemWriters);

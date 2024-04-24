@@ -87,6 +87,32 @@ public class QuerWriterStep {
                 .build();
     }
 
+    /**
+     * 실제 데이터 insert Orders to Orders
+     * id 유지를 위해 native query 사용
+     * @return
+     */
+    @Bean
+    @StepScope
+    public JdbcBatchItemWriter<Orders> deleteAccountsWriter(@Value("#{jobParameters['external.target']}") String target) throws RuntimeException{
+        //AbstractRoutingDataSource에서 datasource 선택
+        DataSourceContextHolder.setDataSourceKey(target);
+        String deleteSql = "DELETE FROM spring_batch.accounts WHERE id = :id; \n";
+
+
+        return new JdbcBatchItemWriterBuilder<Orders>()
+                .dataSource(routingDataSource)
+                //postgresSQL의 경우 스키마 명시가 필요했음.
+                //accounts에는 column_name values는 java의 fieldName
+                .sql(deleteSql)
+                //적어도 하나의 항목이 행을 업데이트하거나 삭제하지 않을 경우 예외를 throw 할지 여부를 설정. 기본값은 true긴함.
+                //삭제는 일어나지 않을 수 있기에 false
+                .assertUpdates(false)
+                //Pojo 기반으로 Insert SQL의 Values를 매핑 .columnMapped() 와 대조 -> key, value 기반으로 value 매핑
+                .beanMapped()
+                .build();
+    }
+
     @Bean
     @StepScope
     public JdbcBatchItemWriter<Orders> insertOrdersWriter(@Value("#{jobParameters['external.target']}") String target) throws RuntimeException{
