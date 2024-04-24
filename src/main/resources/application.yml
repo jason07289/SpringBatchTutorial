@@ -29,11 +29,11 @@ spring:
 jae:
   batch:
     datasource:
-      targets: dev, qa, prod
-      urls: jdbc:postgresql://localhost:5432/batch_test_external, u2, u3
-      usernames: jaehyuklee, n2, n3
+      targets: dev, qa
+      urls: jdbc:postgresql://localhost:5432/batch_test_external, jdbc:postgresql://localhost:5432/batch_test_external
+      usernames: jaehyuklee, jaehyuklee, n3
       passwords:
-      driver-class-names: org.postgresql.Driver, org.postgresql.Driver, org.postgresql.Driver
+      driver-class-names: org.postgresql.Driver, org.postgresql.Driver
 
 ---
 spring:

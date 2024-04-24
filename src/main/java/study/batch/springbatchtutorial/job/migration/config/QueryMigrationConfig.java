@@ -20,7 +20,7 @@ import study.batch.springbatchtutorial.job.migration.listener.MigrationChunkList
 
 /**
  * desc: 주문 테이블 -> 정산 테이블 데이터 이관 query write
- * program args: --spring.batch.job.names=queryMigrationJob
+ * program args: --spring.batch.job.names=queryMigrationJob for 1, --spring.batch.job.names=queryOrdersMigrationJob for 2
  */
 @Configuration
 @RequiredArgsConstructor
@@ -32,11 +32,26 @@ public class QueryMigrationConfig {
     public static int SKIP_LIMIT = 100;
 
     @Bean
+    /**
+     * 1
+     */
     public Job queryMigrationJob(Step queryMigrationStep) {
         return jobBuilderFactory.get("queryMigrationJob")
                 //RunIdIncrementer에서 job에 대한 id가 나온다.
                 .incrementer(new RunIdIncrementer())
                 .start(queryMigrationStep)
+                .build();
+    }
+
+    @Bean
+    /**
+     * 2
+     */
+    public Job queryOrdersMigrationJob(Step queryOrdersMigrationStep) {
+        return jobBuilderFactory.get("queryOrdersMigrationJob")
+                //RunIdIncrementer에서 job에 대한 id가 나온다.
+                .incrementer(new RunIdIncrementer())
+                .start(queryOrdersMigrationStep)
                 .build();
     }
 
@@ -57,6 +72,27 @@ public class QueryMigrationConfig {
                 .skipLimit(SKIP_LIMIT) // 최대 허용 스킵 횟수
                 .skip(Exception.class) // 스킵할 예외 유형
                 .listener(writerListener)
+                .listener(chunkListener)
+                .build();
+    }
+
+    @JobScope
+    @Bean
+    public Step queryOrdersMigrationStep(ItemReader jpaOrdersReader,
+                                   ItemProcessor jpaOrdersProcessor,
+                                   ItemWriter compositeOrdersItemWriter,
+                                   MigrationChunkListener chunkListener,
+                                   AccountsWriterListener writerListener
+    ) {
+        return stepBuilderFactory.get("queryOrdersMigrationStep")
+                .<Orders, Orders>chunk(CHUNK_SIZE)
+                .reader(jpaOrdersReader)
+//                .processor()
+                .writer(compositeOrdersItemWriter)
+//                .faultTolerant()
+//                .skipLimit(SKIP_LIMIT) // 최대 허용 스킵 횟수
+//                .skip(Exception.class) // 스킵할 예외 유형
+//                .listener(writerListener)
                 .listener(chunkListener)
                 .build();
     }

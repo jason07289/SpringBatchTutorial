@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 import study.batch.springbatchtutorial.core.domain.accounts.Accounts;
 import study.batch.springbatchtutorial.core.domain.accounts.AccountsRepository;
 
+import javax.persistence.EntityManager;
+
 @Component
 @RequiredArgsConstructor
 public class JpaAccountsWriterStep {
     private final AccountsRepository accountsRepository;
+    private final EntityManager entityManager;
 
     /**
      * 실제 데이터 입력하는 부분
@@ -22,8 +25,11 @@ public class JpaAccountsWriterStep {
      */
     @StepScope
     @Bean
-    public ItemWriter<Accounts> jpaAccountsWriter(){
-        return items -> accountsRepository.saveAll(items);
+    public ItemWriter<Accounts> jpaAccountsCustomWriter(){
+        return accounts ->
+            accounts.forEach(accountsEach -> {
+                entityManager.persist(accountsEach);
+            });
     }
 
     /**

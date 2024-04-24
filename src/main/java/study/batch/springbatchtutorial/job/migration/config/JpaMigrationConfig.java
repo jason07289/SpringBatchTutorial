@@ -36,16 +36,14 @@ public class JpaMigrationConfig {
 
     @JobScope
     @Bean
-    public Step jpaMigrationStep(ItemReader jpaOrdersReader, ItemProcessor jpaOrdersProcessor, ItemWriter jpaAccountsWriter) {
+    public Step jpaMigrationStep(ItemReader jpaOrdersReader, ItemProcessor jpaOrdersProcessor, ItemWriter jpaAccountsCustomWriter) {
         return stepBuilderFactory.get("jpaMigrationStep")
                 //<I: input, O:output> input으로 읽어와서 output으로 job내에서 사용된다.
                 .<Orders, Accounts>chunk(CHUNK_SIZE)
                 .reader(jpaOrdersReader)
-//                .writer(items -> {
-//                    items.forEach(System.out::println);
-//                })
                 .processor(jpaOrdersProcessor)
-                .writer(jpaAccountsWriter)
+                //id 그대로 유지할 수 있도록 entityManager 직접 접근
+                .writer(jpaAccountsCustomWriter)
                 .build();
     }
 
